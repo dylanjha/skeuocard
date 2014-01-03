@@ -214,14 +214,14 @@ class Skeuocard::SegmentedCardNumberInputView
     if _currentField? and _currentField[0].selectionEnd is _currentField[0].maxLength
       @_focusField(_currentField.next(), 'start')
 
-  _focusFieldForValue: (place)->
+  _focusFieldForValue: (place, dontFocus)->
     value = @getValue()
     if place is 'start'
       field = @el.find('input').first()
-      @_focusField(field, place)
+      @_focusField(field, place, dontFocus)
     else if place is 'end'
       field = @el.find('input').last()
-      @_focusField(field, place)
+      @_focusField(field, place, dontFocus)
     else
       field = null
       fieldOffset = null
@@ -232,14 +232,15 @@ class Skeuocard::SegmentedCardNumberInputView
           fieldPosition = place[1] - _lastStartPos
         _lastStartPos += groupLength
       if field? and fieldPosition?
-        @_focusField(field, [fieldPosition, fieldPosition])
+        @_focusField(field, [fieldPosition, fieldPosition], dontFocus)
       else
-        @_focusField(@el.find('input'), 'end')
+        @_focusField(@el.find('input'), 'end', dontFocus)
     return field
 
-  _focusField: (field, place)->
+  _focusField: (field, place, dontFocus)->
     if field.length isnt 0
-      field[0].focus()
+      unless dontFocus
+        field[0].focus()
       if $(field[0]).is(':visible') and field[0] is document.activeElement
         if place is 'start'
           field[0].setSelectionRange(0, 0)

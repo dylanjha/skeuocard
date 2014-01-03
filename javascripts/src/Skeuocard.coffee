@@ -27,6 +27,7 @@ class Skeuocard
     # configure default opts
     optDefaults = 
       debug: false
+      dontFocus: false
       acceptedCardProducts: null
       cardNumberPlaceholderChar: 'X'
       genericPlaceholder: "XXXX XXXX XXXX XXXX"
@@ -328,7 +329,7 @@ class Skeuocard
   Assert rendering changes necessary for the current product. Passing a null 
   value instead of a product will revert the card to a generic state.
   ###
-  _renderProduct: (product)->
+  _renderProduct: (product, dontFocus)->
     @_log("[_renderProduct]", "Rendering product:", product)
 
     # remove existing product and issuer classes (destyling product)
@@ -343,7 +344,7 @@ class Skeuocard
     @_setUnderlyingValue('type', product?.attrs.companyShortname || null)
     # reconfigure the number input groupings
     @_inputViews.number.setGroupings(product?.attrs.cardNumberGrouping || 
-                                     [@options.genericPlaceholder.length])
+                                     [@options.genericPlaceholder.length], dontFocus)
     if product?
       # reconfigure the expiration input groupings
       @_inputViews.exp.reconfigure
@@ -382,7 +383,7 @@ class Skeuocard
 
   # Update the card's visual representation to reflect internal state.
   render: ->
-    @_renderProduct(@product)
+    @_renderProduct(@product, @options.dontFocus)
     @_renderValidation()
     # @_flipToInvalidSide()
 

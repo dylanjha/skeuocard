@@ -56,7 +56,7 @@ class Skeuocard::ExpirationInputView
     @options.groupings = groupings
     @_setGroupings(@options.groupings)
 
-  _setGroupings: (groupings)->
+  _setGroupings: (groupings, dontFocus)->
     fieldChars = ['D', 'M', 'Y']
     @el.empty()
     _startLength = 0
